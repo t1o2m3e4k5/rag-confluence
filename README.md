@@ -119,7 +119,9 @@ kill {process ID}
 
 8. update vector store for specific Confluence space (e.g. TS)
 ```
-curl --location --request POST 'http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/index/TS'
+curl --location 'http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/index/TS' \
+--header 'Content-Type: application/json' \
+--data '{"frontend_token": "secret_token"}'
 ```
 
 

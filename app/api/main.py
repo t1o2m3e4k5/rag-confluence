@@ -7,7 +7,7 @@ from app.vectorstore.repository import VectorStoreRepository
 from app.rag.agent import stream_answer
 from app.embeddings.service import EmbeddingService
 from app.config import get_settings
-from .schemas import IndexResponse, ChatRequest, ChatResponse
+from .schemas import IndexResponse, IndexRequest, ChatRequest, ChatResponse
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 from langchain_core.messages.ai import AIMessage
@@ -39,12 +39,16 @@ async def read_root():
     return FileResponse(os.path.join(static_dir, "index.html"))
 
 @app.post("/index/{space_key}", response_model=IndexResponse)
-async def index_space(space_key: str):
+async def index_space(space_key: str, request: IndexRequest):
     """(Re)build the vector index for a given Confluence space.
 
     - **Prosta strategia**: najpierw *usuń* wszystkie istniejące wektory danego `space_key`,
       potem dodaj świeżo wygenerowane.  Zero logiki inkrementalnej.
     """
+    # Validate frontend token
+    if not request.frontend_token or request.frontend_token != _settings.frontend_token:
+        raise HTTPException(status_code=403, detail="Invalid frontend token")
+        
     loader = ConfluencePageLoader()
     raw_docs = loader.load_space(space_key)
     splits = _splitter.split_documents(raw_docs)
