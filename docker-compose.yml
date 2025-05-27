@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  pgvector-db:
+    container_name: pgvector-db
+    image: pgvector/pgvector:0.8.0-pg16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: authentication
+    ports:
+      - "15457:5432"
