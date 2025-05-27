@@ -6,6 +6,7 @@ class IndexResponse(BaseModel):
 class ChatRequest(BaseModel):
     prompt: str
     thread_id: str = Field(..., description="Identyfikator wątku rozmowy")
+    frontend_token: str = Field(..., description="Token for frontend validation")
 
 class ChatResponse(BaseModel):
     answer: str

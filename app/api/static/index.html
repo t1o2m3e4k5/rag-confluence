@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <title>Confluence RAG</title>
     <style>
         body {
@@ -91,6 +92,10 @@
                 <input type="text" id="threadId" name="threadId" required readonly>
             </div>
             <div class="form-group">
+                <label for="frontendToken">Frontend Token:</label>
+                <input type="text" id="frontendToken" name="frontendToken" required>
+            </div>
+            <div class="form-group">
                 <label for="prompt">Your Question:</label>
                 <textarea id="prompt" name="prompt" required></textarea>
             </div>
@@ -136,9 +141,15 @@
                     },
                     body: JSON.stringify({
                         thread_id: threadId,
-                        prompt: prompt
+                        prompt: prompt,
+                        frontend_token: document.getElementById('frontendToken').value
                     })
                 });
+                
+                if (res.status === 403) {
+                    response.textContent = 'Error: Invalid Frontend Token. Please check your token and try again.';
+                    return;
+                }
                 
                 const data = await res.json();
                 response.textContent = data.answer;

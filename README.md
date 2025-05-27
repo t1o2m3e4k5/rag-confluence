@@ -57,23 +57,40 @@ vectorstore.repository ← rag.retrieval ← rag.agent
 
 1. Create and activate virtual environment (python 3.11 was used):
 ```powershell
+# Windows PowerShell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+
+# Linux Ubuntu
+python3.11 -m venv .venv
+source .venv/bin/activate
 ```
 
 2. Install dependencies:
 ```powershell
+# Windows PowerShell
 .\.venv\Scripts\pip.exe install -r .\requirements.txt
+
+# Linux Ubuntu
+pip install -r requirements.txt
 ```
 
 3. Configure environment:
 ```powershell
+# Windows PowerShell
+cp .env.example .env  # Update with your credentials
+
+# Linux Ubuntu
 cp .env.example .env  # Update with your credentials
 ```
 
 4. Start PostgreSQL with pgvector:
 ```powershell
+# Windows PowerShell
 docker-compose up -d
+
+# Linux Ubuntu
+docker compose up -d
 ```
 
 5. Initialize vector extension in PostgreSQL:
@@ -83,11 +100,48 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 6. Run the application:
 ```powershell
-uvicorn app.api.main:app --reload
+uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+# in the background - logs will be saved to `app.log` in the current directory.
+nohup uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload > app.log 2>&1 &
 ```
+
+
+
+
+7. stop the application:
+```
+# Linux Ubuntu
+ps aux | grep "uvicorn app.api.main:app" | grep -v grep
+kill {process ID}
+```
+
+
+8. update vector store for specific Confluence space (e.g. TS)
+```
+curl --location --request POST 'http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/index/TS'
+```
+
 
 ## Development
 
 - The application uses FastAPI for the REST API
 - LangChain and LangGraph for RAG implementation
 - PostgreSQL with pgvector for vector storage
+
+
+## AWS EC2 instance ssh connection
+ssh -i "AWS_personal_2keypair.pem" ubuntu@ec2-35-164-165-32.us-west-2.compute.amazonaws.com
+
+
+## HTTP access to the app
+http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/
+
+
+## HTTP access to the Confluence
+http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8090/
+
+# Install a Confluence Data Center trial
+https://confluence.atlassian.com/doc/install-a-confluence-data-center-trial-838416249.html
+
+

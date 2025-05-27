@@ -59,6 +59,10 @@ async def index_space(space_key: str):
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
+    # Validate frontend token
+    if not req.frontend_token or req.frontend_token != _settings.frontend_token:
+        raise HTTPException(status_code=403, detail="Invalid frontend token")
+        
     chunks = []
     for part in stream_answer(req.prompt, req.thread_id):
         if isinstance(part, AIMessage):
