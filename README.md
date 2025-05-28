@@ -33,6 +33,7 @@ app/
 │   ├── __init__.py
 │   ├── schemas.py     # Pydantic request/response models
 │   └── main.py        # FastAPI endpoints
+├── demo/             # Demo and example scripts
 ```
 
 ## Layer Dependencies
@@ -49,20 +50,20 @@ vectorstore.repository ← rag.retrieval ← rag.agent
 
 ## Prerequisites
 
-- Python 3.11
+- Python 3.12
 - Docker and Docker Compose
 - PostgreSQL with pgvector extension
 
 ## Setup Instructions
 
-1. Create and activate virtual environment (python 3.11 was used):
+1. Create and activate virtual environment (python 3.12.3 was used):
 ```powershell
 # Windows PowerShell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # Linux Ubuntu
-python3.11 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -77,19 +78,12 @@ pip install -r requirements.txt
 
 3. Configure environment:
 ```powershell
-# Windows PowerShell
 cp .env.example .env  # Update with your credentials
 
-# Linux Ubuntu
-cp .env.example .env  # Update with your credentials
 ```
 
 4. Start PostgreSQL with pgvector:
 ```powershell
-# Windows PowerShell
-docker-compose up -d
-
-# Linux Ubuntu
 docker compose up -d
 ```
 
