@@ -1,4 +1,4 @@
-# Projekt i Implementacja Aplikacji Wykorzystującej Retrieval-Augmented Generation i Modele Językowe do Wyszukiwania i Prezentacji Informacji z Bazy Wiedzy Confluence
+# Projekt i implementacja aplikacji wykorzystującej RAG oraz LLM do wyszukiwania i prezentacji informacji z bazy wiedzy Confluence
 
 ## Kontekst Akademicki
 Ten projekt jest pracą dyplomową na studiach podyplomowych Artificial Intelligence – Machine Learning na Uniwersytecie WSB Merito w Gdańsku.
@@ -128,4 +128,7 @@ http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/
 http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8090/
 
 # Instalacja wersji próbnej Confluence Data Center
-https://confluence.atlassian.com/doc/install-a-confluence-data-center-trial-838416249.html 
+https://confluence.atlassian.com/doc/install-a-confluence-data-center-trial-838416249.html \
+
+# Github repo 
+https://github.com/t1o2m3e4k5/rag-confluence

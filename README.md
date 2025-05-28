@@ -140,4 +140,7 @@ http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8090/
 # Install a Confluence Data Center trial
 https://confluence.atlassian.com/doc/install-a-confluence-data-center-trial-838416249.html
 
+# Github repo 
+https://github.com/t1o2m3e4k5/rag-confluence
+
 
