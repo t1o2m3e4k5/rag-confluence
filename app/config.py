@@ -14,7 +14,7 @@ except ImportError:  # fallback dla Pydantic v1
 
 class Settings(BaseSettings):
     # DB
-    pg_dsn: str = Field(..., env="PG_DSN")  # postgresql+psycopg2://user:pwd@host/db
+    pg_dsn: str = Field(..., env="PG_DSN")
 
     # Confluence
     confluence_url: str = Field(..., env="CONFLUENCE_URL")

@@ -1,11 +1,22 @@
-# Design and Implementation of an Application Leveraging Retrieval-Augmented Generation and Large Language Models for Searching and Presenting Information from a Confluence Knowledge Base
+# Design and Implementation of an Application Leveraging RAG and LLMs for Searching and Presenting Information from a Confluence Knowledge Base
 
 ## Academic Context
 This project is a postgraduate thesis in Artificial Intelligence – Machine Learning studies at WSB Merito University in Gdańsk.
 
 
 ## Project Overview
-This project implements a Retrieval-Augmented Generation (RAG) system that enhances information retrieval from Confluence knowledge bases using Large Language Models (LLMs).
+This project implements a Retrieval-Augmented Generation (RAG) system that enhances information retrieval from Confluence knowledge base using Large Language Models (LLMs).
+
+## Key Features
+
+### Agentic RAG Approach
+The application uses an agentic RAG approach. This mechanism enables iterative communication with the embedding model – for example, it runs the vector search, evaluates the relevance of results, and if information is missing, it automatically generates a new search query and repeats the step.
+
+### Conversation Memory
+Additionally, the application remembers the conversation history with the user (according to the `thread_id` parameter).
+
+### Hybrid Vector Search
+Another feature is the hybrid approach to vector search, which allows filtering results using metadata. Currently, in the vector database, the following metadata is stored in a JSONB type column: `id`, `when`, `title`, `author`, `source`, `space_key`, `last_modified`. Adding additional fields is straightforward.
 
 ## Architecture
 
@@ -36,17 +47,6 @@ app/
 ├── demo/             # Demo and example scripts
 ```
 
-## Layer Dependencies
-
-```
-config  →  confluence.client
-              ↑
-embeddings    |
-      ↑       |
-vectorstore.repository ← rag.retrieval ← rag.agent
-                                ↑
-                               api.main
-```
 
 ## Prerequisites
 
@@ -111,13 +111,41 @@ kill {process ID}
 ```
 
 
-8. update vector store for specific Confluence space (e.g. TS)
-```
-curl --location 'http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/index/TS' \
+## API Endpoints
+
+The application provides the following endpoints:
+
+### 1. POST /index/{spaceKey}
+Reindexes the selected Confluence space. Results are saved in the PostgreSQL database.
+
+**Example:**
+```bash
+curl --location 'http://localhost:8000/index/TS' \
 --header 'Content-Type: application/json' \
 --data '{"frontend_token": "secret_token"}'
 ```
 
+### 2. POST /chat
+Returns a response from the LLM. 
+
+**Parameters:**
+- `prompt` - contains the user query
+- `thread_id` - contains a string that serves as the conversation identifier (conversation history is remembered within this parameter)
+- `frontend_token` - protection against unauthorized use of the model. This value is set in the `.env` file
+
+**Example:**
+```bash
+curl --location 'http://localhost:8000/chat' \
+--header 'Content-Type: application/json' \
+--data '{
+    "prompt": "What is the latest update on project X?",
+    "thread_id": "thread-ABCDE",
+    "frontend_token": "secret_token"
+}'
+```
+
+### 3. Web Interface
+Additionally, the application exposes a web page with a user interface, allowing users to conduct conversations directly from the browser.
 
 ## Development
 
@@ -125,17 +153,21 @@ curl --location 'http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/i
 - LangChain and LangGraph for RAG implementation
 - PostgreSQL with pgvector for vector storage
 
+## Future Improvements
 
-## AWS EC2 instance ssh connection
-ssh -i "AWS_personal_2keypair.pem" ubuntu@ec2-35-164-165-32.us-west-2.compute.amazonaws.com
+The following enhancements are planned for future development:
 
+### Improved Reindexing Mechanism
+Enhance the reindexing mechanism for selected Confluence spaces (`POST /index/{spaceKey}`). Currently, all vectors for a given Confluence space are deleted and recreated, which is a very time-consuming process for large knowledge bases. This mechanism should update/add/delete only changed Confluence pages (based on Change Data Capture principles).
 
-## HTTP access to the app
-http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8000/
+### Attachment Indexing
+Add indexing support for attachments. Currently, only text data is indexed, but the system could be extended to process and index document attachments such as PDFs, Word documents, and other file types.
 
+### Conversation History Management
+Implement limits on the size of stored conversation history.
 
-## HTTP access to the Confluence
-http://ec2-35-164-165-32.us-west-2.compute.amazonaws.com:8090/
+### Role-Based Access Control (RBAC)
+Implement Role-Based Access Control to provide fine-grained permissions and security, allowing different user roles to access different Confluence spaces and features based on their authorization level.
 
 # Install a Confluence Data Center trial
 https://confluence.atlassian.com/doc/install-a-confluence-data-center-trial-838416249.html
