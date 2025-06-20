@@ -2,7 +2,7 @@ import os
 import datetime as dt
 from typing_extensions import List, TypedDict
 
-from atlassian import Confluence  # lightweight REST wrapper
+from atlassian import Confluence
 
 from langchain_openai import OpenAIEmbeddings
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -18,11 +18,10 @@ from langgraph.graph import MessagesState, StateGraph
 
 
 
-#Set them some safer way (e.g. .env or OS secrets)
 # os.environ["LANGSMITH_TRACING"] = "true"
 # os.environ["LANGSMITH_ENDPOINT"] = "https://api.smith.langchain.com"
 # os.environ["LANGSMITH_API_KEY"] = "*****************************************"
-# os.environ["LANGSMITH_PROJECT"] = "twolak_chat"
+# os.environ["LANGSMITH_PROJECT"] = "***********"
 
 
 

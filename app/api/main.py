@@ -53,10 +53,10 @@ async def index_space(space_key: str, request: IndexRequest):
     raw_docs = loader.load_space(space_key)
     splits = _splitter.split_documents(raw_docs)
 
-    # 1️⃣ wyczyść stare chunk‑i
+    # wyczyść stare chunk‑i
     _repo.delete_by_space(space_key)
 
-    # 2️⃣ zapisz nowe
+    # zapisz nowe
     _repo.insert_documents(splits)
 
     return IndexResponse(processed_pages=len(splits))
