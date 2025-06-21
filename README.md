@@ -1,4 +1,4 @@
-# Design and Implementation of an Application Leveraging RAG and LLMs for Searching and Presenting Information from a Confluence Knowledge Base
+# Design and implementation of an application leveraging RAG and LLMs for searching and presenting information from a Confluence knowledge base
 
 ## Academic Context
 This project is a postgraduate thesis in Artificial Intelligence – Machine Learning studies at WSB Merito University in Gdańsk.
